@@ -68,11 +68,11 @@
    * Custom angular module
    */
   angular
-    .module('openshiftOnlineConsoleExtensions', ['openshiftConsole'])
+    .module('openshiftOnlineConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
       $routeProvider
 	.when('/about', {
-	  templateUrl: 'extensions/about/about.html',
+	  templateUrl: 'online/ui/custom-templates/about.html',
 	  controller: 'AboutController'
 	});
     })

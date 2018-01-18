@@ -1,0 +1,69 @@
+<project-header class="top-header"></project-header>
+<project-page class="online-notifications">
+  <!-- Middle section -->
+  <div class="middle-section">
+    <div class="middle-container">
+      <div class="middle-header">
+        <div class="container-fluid">
+          <div class="page-header">
+            <h1>
+              Notifications
+              <span class="page-header-link page-header-bleed-right">
+                <a ng-href="{{'notifications' | helpLink}}" target="_blank">
+                  Learn More <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </span>
+            </h1>
+          </div>
+        </div>
+      </div><!-- /middle-header-->
+      <div class="middle-content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-10 col-lg-8">
+              <p>Control which critical event email notifications to receive from OpenShift Online.</p>
+              <alerts alerts="alerts"></alerts>
+              <p>Email notifications for project <strong>{{projectName}}</strong> will be sent to <strong>{{requester}}</strong></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-10 col-lg-8">
+              <form name="forms.notifications">
+                <fieldset ng-disabled="disableInputs">
+                  <div class="form-group">
+                    <h4>Send notifications about critical events related to:</h4>
+                    <div class="checkbox">
+                      <label>
+                        <input ng-model="updatedPrefs.deployments" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" autocomplete="off">
+                        Application deployments
+                      </label>
+                      <div style="padding-left: 20px">Example: Requesting more replicas than your quota allows.</div>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input ng-model="updatedPrefs.builds" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" autocomplete="off">
+                        Builds
+                      </label>
+                      <div style="padding-left: 20px">Example: An automatically-triggered build fails, no notifications sent for repeat failures.</div>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input ng-model="updatedPrefs.storage" ng-true-value="'true'" ng-false-value="'false'" type="checkbox" autocomplete="off">
+                        Storage and persistent volumes
+                      </label>
+                      <div style="padding-left: 20px">Example: Unable to find a volume that satisfies the constraints defined in your persistent volume claim (PVC).</div>
+                    </div>
+                  </div>
+                  <div class="button-group gutter-top gutter-bottom">
+                    <button type="submit" class="btn btn-default" ng-click="save()" ng-disabled="forms.notifications.$invalid || forms.notifications.$pristine || disableInputs" value="">Save</button>
+                    <a ng-if="!forms.notifications.$pristine" href="" ng-click="reset()" class="mar-left-sm" style="vertical-align: -2px">Clear changes</a>
+                  </div>
+                </fieldset>
+              </form>
+            </div><!-- /col-* -->
+          </div>
+        </div>
+      </div><!-- /middle-content -->
+    </div><!-- /middle-container -->
+  </div><!-- /middle-section -->
+</project-page>

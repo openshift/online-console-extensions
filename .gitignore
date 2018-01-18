@@ -8,3 +8,5 @@ ansible.log
 ansible/.gogitit-cache.yml
 ansible/vars/zz_custom_vars.yml
 
+node_modules/*
+
