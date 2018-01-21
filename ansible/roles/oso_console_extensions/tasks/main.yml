@@ -5,8 +5,39 @@
   when: item not in vars
   with_items: "{{ required_vars }}"
 
+# Install (docker-py) python package.
+- pip:
+    name: docker-py
+
 - import_tasks: uninstall.yml
   when: oso_ext_uninstall | bool
+
+- debug: msg="Building {{ oso_ext_builder_image}} builder image from {{ oso_ext_builder_repo }} ref {{ oso_ext_builder_git_ref }}"
+
+- name: 'Check for existence of repo {{ oso_ext_builder_repo }}'
+  git:
+    repo: "{{ oso_ext_builder_repo }}"
+    version: "{{ oso_ext_builder_git_ref }}"
+    accept_hostkey: true
+    dest: /data/src/github.com/openshift/online-console-extensions
+    update: no
+  delegate_to: "{{ inventory_hostname }}"
+  failed_when: false
+  register: repo_exists
+
+- name: Fetch latest git {{ oso_ext_builder_repo }}
+  git:
+    repo: "{{ oso_ext_builder_repo }}"
+    version: "{{ oso_ext_builder_git_ref }}"
+    accept_hostkey: true
+    dest: /data/src/github.com/openshift/online-console-extensions
+  delegate_to: "{{ inventory_hostname }}"
+  when: repo_exists.failed
+
+- name: Build console-extensions builder image
+  docker_image:
+     path: /data/src/github.com/openshift/online-console-extensions/s2i-custom-builder
+     name: "{{ oso_ext_builder_image }}"
 
 - debug: msg="Deploying {{ oso_ext_appname}} from {{ oso_ext_git_repo }} ref {{ oso_ext_git_ref }}"
 

@@ -37,20 +37,20 @@ oso_extensions_target will be one of 'free|paid'.
               osio ==> free
 ```
 
-Here's an example for how to set sytlesheet/scripts urls:
+Here's an example for how to set stylesheet/scripts urls:
 ```
 ( when osod_cluster_tier == "pro" )
 - set_fact:
-    openshift_extension_script_urls: "[ 'http://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js', 'http://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js', 'http://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js' ]"
+    openshift_extension_script_urls: "[ 'https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js', 'https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js', 'https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js' ]"
 
 ( when osod_cluster_tier == "starter"|"ipaas"|"osio" )
 - set_fact:
-    openshift_extension_script_urls: "[ 'http://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js' ]"
+    openshift_extension_script_urls: "[ 'https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js' ]"
   when: tier == "starter"
 
 ( same for all osod_cluster_tier )
 - set_fact:
-    openshift_extension_stylesheet_urls: "[ 'http://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css']"
+    openshift_extension_stylesheet_urls: "[ 'https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css']"
 
 ```
 
