@@ -1,0 +1,11 @@
+---
+output_dir: vendor/
+repos:
+- id: openshift-ansible
+  url: https://github.com/openshift/openshift-ansible.git
+  version: openshift-ansible-3.9.0-0.19.0
+  copy:
+  - src: ./
+    dst: openshift-ansible/
+  - src: roles/lib_openshift/
+    dst: roles/lib_openshift/

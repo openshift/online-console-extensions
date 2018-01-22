@@ -1,0 +1,131 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: online-console-extensions
+
+parameters:
+- name: NAME
+  description: The name of the DeploymentConfig
+  value: online-console-extensions
+- name: GIT_REPO
+  description: Git repository housing the code to build and deploy
+  value: "https://github.com/openshift/online-console-extensions.git"
+- name: GIT_REF
+  description: Git branch, commit, or tag to deploy
+  value: "master"
+- name: TARGET
+  description: One of free|paid
+  value: "{{ oso_extensions_target }}"
+
+objects:
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    source:
+      git:
+        uri: ${GIT_REPO}
+        ref: ${GIT_REF}
+    strategy:
+      sourceStrategy:
+        env:
+        - name: TARGET
+          value: ${TARGET}
+        from:
+          kind: DockerImage
+          name: ${NAME}-builder:latest
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    triggers:
+      - type: ConfigChange
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+  status:
+    dockerImageRepository:
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    strategy:
+      type: Recreate
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+          - ${NAME}
+          from:
+            kind: ImageStreamTag
+            name: ${NAME}:latest
+            namespace: openshift-infra
+        type: ImageChange
+      - type: ConfigChange
+    replicas: 1
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    template:
+      metadata:
+        labels:
+          app: ${NAME}
+          deploymentconfig: ${NAME}
+      spec:
+        containers:
+        - name: ${NAME}
+          ports:
+          - containerPort: 8443
+            protocol: TCP
+          - containerPort: 8080
+            protocol: TCP
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    port:
+      targetPort: 8443-tcp
+    to:
+      kind: Service
+      name: ${NAME}
+      weight: 100
+    tls:
+      termination: passthrough
+      insecureEdgeTerminationPolicy: Redirect
+    wildcardPolicy: None
+
+# A service to expose the ui-extensions server
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${NAME}
+    labels:
+      app: ${NAME}
+  spec:
+    ports:
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      app: ${NAME}

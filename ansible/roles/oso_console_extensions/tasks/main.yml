@@ -1,0 +1,85 @@
+---
+- name: Check for required vars
+  fail:
+    msg: "Please specify a value for {{ item }}"
+  when: item not in vars
+  with_items: "{{ required_vars }}"
+
+# Install (docker-py) python package.
+- pip:
+    name: docker-py
+
+- import_tasks: uninstall.yml
+  when: oso_ext_uninstall | bool
+
+- debug: msg="Building {{ oso_ext_builder_image}} builder image from {{ oso_ext_builder_repo }} ref {{ oso_ext_builder_git_ref }}"
+
+- name: 'Check for existence of repo {{ oso_ext_builder_repo }}'
+  git:
+    repo: "{{ oso_ext_builder_repo }}"
+    version: "{{ oso_ext_builder_git_ref }}"
+    accept_hostkey: true
+    dest: /data/src/github.com/openshift/online-console-extensions
+    update: no
+  delegate_to: "{{ inventory_hostname }}"
+  failed_when: false
+  register: repo_exists
+
+- name: Fetch latest git {{ oso_ext_builder_repo }}
+  git:
+    repo: "{{ oso_ext_builder_repo }}"
+    version: "{{ oso_ext_builder_git_ref }}"
+    accept_hostkey: true
+    dest: /data/src/github.com/openshift/online-console-extensions
+  delegate_to: "{{ inventory_hostname }}"
+  when: repo_exists.failed
+
+- name: Build console-extensions builder image
+  docker_image:
+     path: /data/src/github.com/openshift/online-console-extensions/s2i-custom-builder
+     name: "{{ oso_ext_builder_image }}"
+
+- debug: msg="Deploying {{ oso_ext_appname}} from {{ oso_ext_git_repo }} ref {{ oso_ext_git_ref }}"
+
+- name: Copy application template
+  template:
+    src: console-extensions-template.yml.j2
+    dest: "{{ oso_ext_template_path }}"
+
+- name: Create template
+  oc_obj:
+    state: present
+    namespace: "{{ oso_ext_namespace }}"
+    name: online-console-extensions
+    kind: template
+    files:
+    - "{{ oso_ext_template_path }}"
+
+- name: Apply template
+  shell: "oc process -n {{ oso_ext_namespace }} online-console-extensions | oc apply -n {{ oso_ext_namespace }} -f -"
+  # apply does not indicate if something changed today. Assume changed_when
+  # false and rely on the template update as our best indicator if something
+  # changed.
+  changed_when: false
+
+- name: Fetch latest git online-console-extensions
+  git:
+    repo: "{{ oso_ext_git_repo }}"
+    version: "{{ oso_ext_git_ref }}"
+    accept_hostkey: true
+    clone: no
+  register: git_sha1_results
+  # Git may not be installed on remote hosts.
+  delegate_to: localhost
+  changed_when: false
+
+- debug: msg="Checking that latest build matches git ref {{ git_sha1_results.after }}"
+
+- name: Start build if required
+  oc_start_build_check:
+    namespace: "{{ oso_ext_namespace }}"
+    buildconfig: "online-console-extensions"
+    git_ref: "{{ git_sha1_results.after }}"
+  register: start_build_out
+
+- debug: var=start_build_out

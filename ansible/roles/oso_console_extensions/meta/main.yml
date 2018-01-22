@@ -1,0 +1,6 @@
+---
+dependencies:
+  - { role: lib_openshift }
+  - { role: oc_start_build_check }
+  - { role: lib_utils }
+  - { role: openshift_facts }

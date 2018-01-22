@@ -1,0 +1,93 @@
+---
+- name: 'Set openshift-ansible vars facts'
+  hosts: OSEv3
+  remote_user: root
+  vars_files:
+  - vars/user_vars.yml
+  - vars/deploy_vars.yml
+  - vars/console_extensions_vars.yml
+  roles:
+  - set_config_vars
+
+#- debug: var=hostvars[groups['OSEv3'][0]]
+
+- name: Deploy online console extensions
+  hosts: masters
+  remote_user: root
+  run_once: true
+  tasks:
+  # Check if optional vars and secret vars dirs are specified and exist, and load if so.
+  # This allows for seamless re-use of this playbook between Online devenv and Ops.
+  - set_fact:
+      oso_extensions_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
+  - set_fact:
+      oso_extensions_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
+
+  - set_fact:
+      vars_dir: "./vars/"
+    when: vars_dir is not defined
+
+  - name: Check if vars/ exists
+    local_action: stat path="{{ vars_dir }}"
+    register: vars_dir_stat
+    become: no
+
+  - name: Load all variables from vars/
+    include_vars:
+      dir: "{{ vars_dir }}"
+      extensions:
+      - yml
+    when: vars_dir_stat.stat.exists
+
+  - set_fact:
+      group_vars_dir: "./inventory/group_vars/"
+    when: group_vars_dir is not defined
+
+  - name: Check if group_vars/ exists
+    local_action: stat path="{{ group_vars_dir }}"
+    register: group_vars_dir_stat
+    become: no
+
+# The oso_extensions_target is also set in openshift/online/ansible/oso_deployer.yml
+# Need to keep these in sync.  This is so you can run console-extensions.yml as a
+# standalone or can include in oso_deployer.yml
+  - set_fact:
+      oso_extensions_target: "free"
+    when: tier == "starter"
+
+  - set_fact:
+      oso_extensions_target: "paid"
+    when: 'tier == "pro" or tier == "none"'
+
+  - name: Load all variables from group_vars/
+    include_vars:
+      dir: "{{ group_vars_dir }}"
+      extensions:
+      - yml
+    when: group_vars_dir_stat.stat.exists
+
+  - include_role:
+      name: lib_openshift
+
+  - include_role:
+      name: lib_utils
+
+  - include_role:
+      name: openshift_facts
+
+  - include_role:
+      name: oc_start_build_check
+
+  - include_role:
+      name: oso_console_extensions
+
+  - include_role:
+      name: openshift_web_console
+      tasks_from: update_console_config.yml
+    vars:
+      console_config_edits:
+        - key: extensions#scriptURLs
+          value: "{{ oso_extensions_scripts }}"
+        - key: extensions#stylesheetURLs
+          value: "{{ oso_extensions_stylesheets }}"
+
