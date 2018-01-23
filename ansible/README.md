@@ -42,20 +42,20 @@ Here's an example for how to set stylesheet/scripts urls:
 ( when osod_cluster_tier == "pro" )
 - set_fact:
     openshift_extension_script_urls:
-      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js"
-      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js"
-      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js"
+      - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js"
+      - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js"
+      - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js"
 
 ( when osod_cluster_tier == "starter"|"ipaas"|"osio" )
 - set_fact:
     openshift_extension_script_urls:
-      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js"
+      - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js"
   when: tier == "starter"
 
 ( same for all osod_cluster_tier )
 - set_fact:
     openshift_extension_stylesheet_urls:
-      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css"
+      - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css"
 
 ```
 
