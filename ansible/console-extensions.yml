@@ -22,6 +22,8 @@
       osce_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
   - set_fact:
       osce_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
+  - set_fact:
+      osce_properties: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_properties }}"
 
   - set_fact:
       vars_dir: "./vars/"
@@ -90,4 +92,6 @@
           value: "{{ osce_scripts }}"
         - key: extensions#stylesheetURLs
           value: "{{ osce_stylesheets }}"
+        - key: extensions#properties
+          value: "{{ osce_properties }}"
 
