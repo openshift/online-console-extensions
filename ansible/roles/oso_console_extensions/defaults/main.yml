@@ -1,6 +1,6 @@
 osce_appname: 'online-console-extensions'
 
-# osce_extensions_target will be one of 'free|paid'.
+# osce_target will be one of 'free|paid'.
 # osod_cluster_tier ==> osce_target
 #           starter ==> free
 #               pro ==> paid 
@@ -24,9 +24,9 @@ osce_uninstall: False
 
 # These variables must be defined before role execution
 required_vars:
-  - osce_extensions_target
-  - osce_extensions_stylesheets
-  - osce_extensions_scripts
+  - osce_target
+  - osce_stylesheets
+  - osce_scripts
 
 # This won't be necessary once the custom builder image is synced to aws-registry
 osce_builder_image: 'online-console-extensions-builder:latest'
