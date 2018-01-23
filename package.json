@@ -1,0 +1,13 @@
+{
+  "name": "online-console-extensions",
+  "version": "3.9.0-alpha.0",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/openshift/online-console-extensions.git"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-angular-templates": "^1.1.0"
+  }
+}
