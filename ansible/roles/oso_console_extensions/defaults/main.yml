@@ -1,7 +1,7 @@
-oso_ext_appname: 'online-console-extensions'
+osce_ext_appname: 'online-console-extensions'
 
-# oso_extensions_target will be one of 'free|paid'.
-# osod_cluster_tier ==> oso_ext_target
+# osce_extensions_target will be one of 'free|paid'.
+# osod_cluster_tier ==> osce_ext_target
 #           starter ==> free
 #               pro ==> paid 
 #             dsaas ==> free
@@ -9,26 +9,26 @@ oso_ext_appname: 'online-console-extensions'
 
 # WARNING: Keep these in sync with the defaults in the template.  We want the
 # template to be independently usable so default must be defined in both.
-oso_ext_git_repo: 'https://github.com/openshift/online-console-extensions.git'
-oso_ext_git_ref: 'master'
+osce_ext_git_repo: 'https://github.com/openshift/online-console-extensions.git'
+osce_ext_git_ref: 'master'
 
 # Location on master where we store OpenShift app template
-oso_ext_template_path: /etc/openshift-online/templates/console-extensions-template.yml
-oso_ext_namespace: 'openshift-infra'
+osce_ext_template_path: /etc/openshift-online/templates/console-extensions-template.yml
+osce_ext_namespace: 'openshift-infra'
 
-oso_webconsole_config: 'webconsole-config'
-oso_webconsole_namespace: 'openshift-web-console'
+osce_webconsole_config: 'webconsole-config'
+osce_webconsole_namespace: 'openshift-web-console'
 
 # If true, will uninstall all app components before running rest of role
-oso_ext_uninstall: False
+osce_ext_uninstall: False
 
 # These variables must be defined before role execution
 required_vars:
-  - oso_extensions_target
-  - oso_extensions_stylesheets
-  - oso_extensions_scripts
+  - osce_extensions_target
+  - osce_extensions_stylesheets
+  - osce_extensions_scripts
 
 # This won't be necessary once the custom builder image is synced to aws-registry
-oso_ext_builder_image: 'online-console-extensions-builder:latest'
-oso_ext_builder_repo: 'https://github.com/sallyom/online-console-extensions.git'
-oso_ext_builder_git_ref: 'ansible-template'
+osce_ext_builder_image: 'online-console-extensions-builder:latest'
+osce_ext_builder_repo: 'https://github.com/sallyom/online-console-extensions.git'
+osce_ext_builder_git_ref: 'ansible-template'

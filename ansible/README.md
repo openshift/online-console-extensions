@@ -22,15 +22,15 @@ See defaults/main.yml and files/console-extensions-template.yml for default valu
 
 ### Required
 
-- oso_extensions_target
-- oso_extensions_stylesheet
-- oso_extensions_scripts
+- osce_extensions_target
+- osce_extensions_stylesheet
+- osce_extensions_scripts
 
-oso_extensions_target must be set to either 'free' or 'paid'.  This corresponds to 
+osce_extensions_target must be set to either 'free' or 'paid'.  This corresponds to 
 the file structure of the online-console-extensions repository.
 ```
-oso_extensions_target will be one of 'free|paid'.
- osod_cluster_tier ==> oso_extensions_target
+osce_extensions_target will be one of 'free|paid'.
+ osod_cluster_tier ==> osce_extensions_target
            starter ==> free
                pro ==> paid 
              ipaas ==> free
@@ -42,20 +42,20 @@ Here's an example for how to set stylesheet/scripts urls:
 ( when osod_cluster_tier == "pro" )
 - set_fact:
     openshift_extension_script_urls:
-      - "https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js"
-      - "https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js"
-      - "https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js"
+      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/online-extensions.js"
+      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/ui/assets/extensions/intercom-widget-extension.js"
+      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ openshift_master_default_subdomain }}/ui/assets/extensions/online-notifications.js"
 
 ( when osod_cluster_tier == "starter"|"ipaas"|"osio" )
 - set_fact:
     openshift_extension_script_urls:
-      - "https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js"
+      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.js"
   when: tier == "starter"
 
 ( same for all osod_cluster_tier )
 - set_fact:
     openshift_extension_stylesheet_urls:
-      - "https://{{ oso_ext_appname }}-{{ oso_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css"
+      - "https://{{ osce_ext_appname }}-{{ osce_ext_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css"
 
 ```
 
