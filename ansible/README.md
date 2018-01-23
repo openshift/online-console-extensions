@@ -22,15 +22,15 @@ See defaults/main.yml and files/console-extensions-template.yml for default valu
 
 ### Required
 
-- osce_extensions_target
-- osce_extensions_stylesheet
-- osce_extensions_scripts
+- osce_target
+- osce_stylesheet
+- osce_scripts
 
-osce_extensions_target must be set to either 'free' or 'paid'.  This corresponds to 
+osce_target must be set to either 'free' or 'paid'.  This corresponds to 
 the file structure of the online-console-extensions repository.
 ```
-osce_extensions_target will be one of 'free|paid'.
- osod_cluster_tier ==> osce_extensions_target
+osce_target will be one of 'free|paid'.
+ osod_cluster_tier ==> osce_target
            starter ==> free
                pro ==> paid 
              ipaas ==> free
