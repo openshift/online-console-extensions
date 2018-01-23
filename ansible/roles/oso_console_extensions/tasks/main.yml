@@ -6,8 +6,9 @@
   with_items: "{{ required_vars }}"
 
 # Install (docker-py) python package.
-- pip:
-    name: docker-py
+- yum:
+    name: python-docker-py
+    state: installed
 
 - import_tasks: uninstall.yml
   when: osce_uninstall | bool
