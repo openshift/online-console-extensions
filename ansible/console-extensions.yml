@@ -19,9 +19,9 @@
   # Check if optional vars and secret vars dirs are specified and exist, and load if so.
   # This allows for seamless re-use of this playbook between Online devenv and Ops.
   - set_fact:
-      oso_extensions_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
+      osce_extensions_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
   - set_fact:
-      oso_extensions_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
+      osce_extensions_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
 
   - set_fact:
       vars_dir: "./vars/"
@@ -48,15 +48,15 @@
     register: group_vars_dir_stat
     become: no
 
-# The oso_extensions_target is also set in openshift/online/ansible/oso_deployer.yml
+# The osce_extensions_target is also set in openshift/online/ansible/oso_deployer.yml
 # Need to keep these in sync.  This is so you can run console-extensions.yml as a
 # standalone or can include in oso_deployer.yml
   - set_fact:
-      oso_extensions_target: "free"
+      osce_extensions_target: "free"
     when: tier == "starter"
 
   - set_fact:
-      oso_extensions_target: "paid"
+      osce_extensions_target: "paid"
     when: 'tier == "pro" or tier == "none"'
 
   - name: Load all variables from group_vars/
@@ -87,7 +87,7 @@
     vars:
       console_config_edits:
         - key: extensions#scriptURLs
-          value: "{{ oso_extensions_scripts }}"
+          value: "{{ osce_extensions_scripts }}"
         - key: extensions#stylesheetURLs
-          value: "{{ oso_extensions_stylesheets }}"
+          value: "{{ osce_extensions_stylesheets }}"
 

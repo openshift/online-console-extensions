@@ -1,13 +1,13 @@
 ---
-- name: "uninstall all {{ oso_ext_appname }} components"
+- name: "uninstall all {{ osce_ext_appname }} components"
   oc_obj:
     state: absent
     kind: "{{ item.kind }}"
     name: "{{ item.name }}"
-    namespace: "{{ oso_ext_namespace }}"
+    namespace: "{{ osce_ext_namespace }}"
   with_items:
-    - { kind: "deploymentconfig", name: "{{ oso_ext_appname }}" }
-    - { kind: "buildconfig", name: "{{ oso_ext_appname }}" }
-    - { kind: "imagestreams", name: "{{ oso_ext_appname }}" }
-    - { kind: "route", name: "{{ oso_ext_appname }}" }
-    - { kind: "service", name: "{{ oso_ext_appname }}" }
+    - { kind: "deploymentconfig", name: "{{ osce_ext_appname }}" }
+    - { kind: "buildconfig", name: "{{ osce_ext_appname }}" }
+    - { kind: "imagestreams", name: "{{ osce_ext_appname }}" }
+    - { kind: "route", name: "{{ osce_ext_appname }}" }
+    - { kind: "service", name: "{{ osce_ext_appname }}" }
