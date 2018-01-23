@@ -10,14 +10,14 @@
     name: docker-py
 
 - import_tasks: uninstall.yml
-  when: osce_ext_uninstall | bool
+  when: osce_uninstall | bool
 
-- debug: msg="Building {{ osce_ext_builder_image}} builder image from {{ osce_ext_builder_repo }} ref {{ osce_ext_builder_git_ref }}"
+- debug: msg="Building {{ osce_builder_image}} builder image from {{ osce_builder_repo }} ref {{ osce_builder_git_ref }}"
 
-- name: 'Check for existence of repo {{ osce_ext_builder_repo }}'
+- name: 'Check for existence of repo {{ osce_builder_repo }}'
   git:
-    repo: "{{ osce_ext_builder_repo }}"
-    version: "{{ osce_ext_builder_git_ref }}"
+    repo: "{{ osce_builder_repo }}"
+    version: "{{ osce_builder_git_ref }}"
     accept_hostkey: true
     dest: /data/src/github.com/openshift/online-console-extensions
     update: no
@@ -25,10 +25,10 @@
   failed_when: false
   register: repo_exists
 
-- name: Fetch latest git {{ osce_ext_builder_repo }}
+- name: Fetch latest git {{ osce_builder_repo }}
   git:
-    repo: "{{ osce_ext_builder_repo }}"
-    version: "{{ osce_ext_builder_git_ref }}"
+    repo: "{{ osce_builder_repo }}"
+    version: "{{ osce_builder_git_ref }}"
     accept_hostkey: true
     dest: /data/src/github.com/openshift/online-console-extensions
   delegate_to: "{{ inventory_hostname }}"
@@ -37,26 +37,26 @@
 - name: Build console-extensions builder image
   docker_image:
      path: /data/src/github.com/openshift/online-console-extensions/s2i-custom-builder
-     name: "{{ osce_ext_builder_image }}"
+     name: "{{ osce_builder_image }}"
 
-- debug: msg="Deploying {{ osce_ext_appname}} from {{ osce_ext_git_repo }} ref {{ osce_ext_git_ref }}"
+- debug: msg="Deploying {{ osce_appname}} from {{ osce_git_repo }} ref {{ osce_git_ref }}"
 
 - name: Copy application template
   template:
     src: console-extensions-template.yml.j2
-    dest: "{{ osce_ext_template_path }}"
+    dest: "{{ osce_template_path }}"
 
 - name: Create template
   oc_obj:
     state: present
-    namespace: "{{ osce_ext_namespace }}"
+    namespace: "{{ osce_namespace }}"
     name: online-console-extensions
     kind: template
     files:
-    - "{{ osce_ext_template_path }}"
+    - "{{ osce_template_path }}"
 
 - name: Apply template
-  shell: "oc process -n {{ osce_ext_namespace }} online-console-extensions | oc apply -n {{ osce_ext_namespace }} -f -"
+  shell: "oc process -n {{ osce_namespace }} online-console-extensions | oc apply -n {{ osce_namespace }} -f -"
   # apply does not indicate if something changed today. Assume changed_when
   # false and rely on the template update as our best indicator if something
   # changed.
@@ -64,8 +64,8 @@
 
 - name: Fetch latest git online-console-extensions
   git:
-    repo: "{{ osce_ext_git_repo }}"
-    version: "{{ osce_ext_git_ref }}"
+    repo: "{{ osce_git_repo }}"
+    version: "{{ osce_git_ref }}"
     accept_hostkey: true
     clone: no
   register: git_sha1_results
@@ -77,7 +77,7 @@
 
 - name: Start build if required
   oc_start_build_check:
-    namespace: "{{ osce_ext_namespace }}"
+    namespace: "{{ osce_namespace }}"
     buildconfig: "online-console-extensions"
     git_ref: "{{ git_sha1_results.after }}"
   register: start_build_out

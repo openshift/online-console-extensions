@@ -1,7 +1,7 @@
-osce_ext_appname: 'online-console-extensions'
+osce_appname: 'online-console-extensions'
 
 # osce_extensions_target will be one of 'free|paid'.
-# osod_cluster_tier ==> osce_ext_target
+# osod_cluster_tier ==> osce_target
 #           starter ==> free
 #               pro ==> paid 
 #             dsaas ==> free
@@ -9,18 +9,18 @@ osce_ext_appname: 'online-console-extensions'
 
 # WARNING: Keep these in sync with the defaults in the template.  We want the
 # template to be independently usable so default must be defined in both.
-osce_ext_git_repo: 'https://github.com/openshift/online-console-extensions.git'
-osce_ext_git_ref: 'master'
+osce_git_repo: 'https://github.com/openshift/online-console-extensions.git'
+osce_git_ref: 'master'
 
 # Location on master where we store OpenShift app template
-osce_ext_template_path: /etc/openshift-online/templates/console-extensions-template.yml
-osce_ext_namespace: 'openshift-infra'
+osce_template_path: /etc/openshift-online/templates/console-extensions-template.yml
+osce_namespace: 'openshift-infra'
 
 osce_webconsole_config: 'webconsole-config'
 osce_webconsole_namespace: 'openshift-web-console'
 
 # If true, will uninstall all app components before running rest of role
-osce_ext_uninstall: False
+osce_uninstall: False
 
 # These variables must be defined before role execution
 required_vars:
@@ -29,6 +29,6 @@ required_vars:
   - osce_extensions_scripts
 
 # This won't be necessary once the custom builder image is synced to aws-registry
-osce_ext_builder_image: 'online-console-extensions-builder:latest'
-osce_ext_builder_repo: 'https://github.com/sallyom/online-console-extensions.git'
-osce_ext_builder_git_ref: 'ansible-template'
+osce_builder_image: 'online-console-extensions-builder:latest'
+osce_builder_repo: 'https://github.com/sallyom/online-console-extensions.git'
+osce_builder_git_ref: 'ansible-template'
