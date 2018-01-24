@@ -27,6 +27,7 @@ required_vars:
   - osce_target
   - osce_stylesheets
   - osce_scripts
+  - osce_properties
 
 # This won't be necessary once the custom builder image is synced to aws-registry
 osce_builder_image: 'online-console-extensions-builder:latest'

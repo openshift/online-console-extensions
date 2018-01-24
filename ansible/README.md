@@ -25,6 +25,7 @@ See defaults/main.yml and files/console-extensions-template.yml for default valu
 - osce_target
 - osce_stylesheet
 - osce_scripts
+- osce_properties
 
 osce_target must be set to either 'free' or 'paid'.  This corresponds to 
 the file structure of the online-console-extensions repository.
@@ -57,6 +58,16 @@ Here's an example for how to set stylesheet/scripts urls:
     openshift_extension_stylesheet_urls:
       - "https://{{ osce_appname }}-{{ osce_namespace }}.{{ hostvars[groups['OSEv3'][0]].openshift_master_default_subdomain }}/assets/extensions/online-extensions.css"
 
+```
+
+Extension properties:
+```
+- set_fact:
+    openshift_extension_properties:
+      online_version: '3.6.0.87'
+      support_link: 'https://access.redhat.com/'
+      doc_url: 'https://docs.openshift.com/online/'
+      ...
 ```
 
 
