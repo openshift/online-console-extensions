@@ -31,5 +31,5 @@ required_vars:
 
 # This won't be necessary once the custom builder image is synced to aws-registry
 osce_builder_image: 'online-console-extensions-builder:latest'
-osce_builder_repo: 'https://github.com/sallyom/online-console-extensions.git'
+osce_builder_repo: 'https://github.com/openshift/online-console-extensions.git'
 osce_builder_git_ref: 'ansible-template'
