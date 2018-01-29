@@ -15,14 +15,25 @@ angular.module('openshiftOnlineConsoleTemplates', []).run(['$templateCache', fun
     "              <div class=\"col-md-9\">\n" +
     "                <h1>Red Hat OpenShift <span class=\"about-reg\">&reg;</span></h1>\n" +
     "                <h2>About</h2>\n" +
-    "                <p><a target=\"_blank\" href=\"https://openshift.com\">OpenShift</a> is Red Hat's Platform-as-a-Service (PaaS) that allows developers to quickly develop, host, and scale applications in a cloud environment.</p>\n" +
+    "                <p>\n" +
+    "                  <a target=\"_blank\" href=\"https://openshift.com\">OpenShift</a> is Red Hat's container application platform\n" +
+    "                  that allows developers to quickly develop, host, and scale applications in a cloud environment.\n" +
+    "                </p>\n" +
     "\n" +
     "                <h2 id=\"version\">Version</h2>\n" +
     "                <dl class=\"dl-horizontal left\">\n" +
     "                  <dt>OpenShift Master:</dt>\n" +
-    "                  <dd>{{version.master.openshift || 'unknown'}}</dd>\n" +
+    "                  <dd>\n" +
+    "                    {{version.master.openshift}} {{online_version}}\n" +
+    "                  </dd>\n" +
     "                  <dt>Kubernetes Master:</dt>\n" +
-    "                  <dd>{{version.master.kubernetes || 'unknown'}}</dd>\n" +
+    "                  <dd>\n" +
+    "                    {{version.master.kubernetes}}\n" +
+    "                  </dd>\n" +
+    "                  <dt>OpenShift Web Console:</dt>\n" +
+    "                  <dd>\n" +
+    "                    {{version.console}}\n" +
+    "                  </dd>\n" +
     "                </dl>\n" +
     "\n" +
     "                <h2>Registry</h2>\n" +
@@ -31,9 +42,24 @@ angular.module('openshiftOnlineConsoleTemplates', []).run(['$templateCache', fun
     "                  <copy-to-clipboard display-wide=\"true\" clipboard-text=\"online_registry_url\" input-text=\"online_registry_url\" class=\"ng-isolate-scope\"></copy-to-clipboard>\n" +
     "                </p>\n" +
     "\n" +
-    "                <p>The <a target=\"_blank\" href=\"{{'welcome' | helpLink}}\">documentation</a> contains information and guides to help you learn about OpenShift and start exploring its features. From getting started with creating your first application, to trying out more advanced build and deployment techniques, it provides what you need to set up and manage your OpenShift environment as an application developer.</p>\n" +
+    "                <p>\n" +
+    "                  The <a target=\"_blank\" ng-href=\"{{'welcome' | helpLink}}\">documentation</a> helps you learn about\n" +
+    "                  OpenShift and start exploring its features. From getting started with creating your first application\n" +
+    "                  to trying out more advanced build and deployment techniques, it provides guidance on setting up and\n" +
+    "                  managing your OpenShift environment as an application developer.\n" +
+    "                </p>\n" +
     "\n" +
-    "                <p>With the OpenShift command line interface (CLI), you can create applications and manage OpenShift projects from a terminal. To get started using the CLI, visit <a href=\"command-line\">Command Line Tools</a>.</p>\n" +
+    "                <p>\n" +
+    "                  With the OpenShift command line interface (CLI), you can create applications and manage OpenShift\n" +
+    "                  projects from a terminal. To get started using the CLI, visit\n" +
+    "                  <a href=\"command-line\">Command Line Tools</a>.\n" +
+    "                </p>\n" +
+    "\n" +
+    "                <h2>Account</h2>\n" +
+    "                <p>\n" +
+    "                  You are currently logged in under the user account <strong>{{user.metadata.name}}</strong>.\n" +
+    "                </p>\n" +
+    "\n" +
     "              </div>\n" +
     "            </div>\n" +
     "          </div>\n" +

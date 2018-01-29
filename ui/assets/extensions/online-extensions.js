@@ -35,9 +35,6 @@
   window.OPENSHIFT_CONSTANTS.HELP["selector_label"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/selector_label_volume_binding.html";
   window.OPENSHIFT_CONSTANTS.HELP["notifications"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/notifications.html";
 
-  if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
-    window.OPENSHIFT_VERSION.openshift = window.OPENSHIFT_VERSION.openshift + " (online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
-  }
   if (window.OPENSHIFT_EXTENSION_PROPERTIES.enable_pipelines) {
     window.OPENSHIFT_CONSTANTS.ENABLE_TECH_PREVIEW_FEATURE.pipelines = true;
   }
@@ -71,14 +68,18 @@
     .module('openshiftOnlineConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
       $routeProvider
-	.when('/about', {
-	  templateUrl: 'online/ui/custom-templates/about.html',
-	  controller: 'AboutController'
-	});
+        .when('/about', {
+          templateUrl: 'online/ui/custom-templates/about.html',
+          controller: 'AboutController'
+        });
     })
     .run(function(extensionRegistry, $rootScope) {
       if(window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url) {
-	$rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
+        $rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
+      }
+
+      if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
+        $rootScope.online_version = "(online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
       }
       
       /*
