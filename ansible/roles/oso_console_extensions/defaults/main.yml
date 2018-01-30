@@ -29,4 +29,4 @@ required_vars:
   - osce_scripts
   - osce_properties
 
-osce_builder_image: 'registry.reg-aws.openshift.com/openshift3/oso-console-extensions:latest'
+osce_builder_image: 'registry.reg-aws.openshift.com/openshift3/{{ osce_appname }}-builder:latest'

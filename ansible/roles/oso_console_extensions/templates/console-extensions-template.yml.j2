@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: online-console-extensions
+  name: "{{ osce_appname }}"
 
 parameters:
 - name: NAME
-  description: The name of the DeploymentConfig
-  value: online-console-extensions
+  description: The name of the console-extensions app
+  value: "{{ osce_appname }}"
 - name: GIT_REPO
   description: Git repository housing the code to build and deploy
   value: "https://github.com/openshift/online-console-extensions.git"

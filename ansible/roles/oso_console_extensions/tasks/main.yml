@@ -19,13 +19,13 @@
   oc_obj:
     state: present
     namespace: "{{ osce_namespace }}"
-    name: online-console-extensions
+    name: "{{ osce_appname }}"
     kind: template
     files:
     - "{{ osce_template_path }}"
 
 - name: Apply template
-  shell: "oc process -n {{ osce_namespace }} online-console-extensions | oc apply -n {{ osce_namespace }} -f -"
+  shell: "oc process -n {{ osce_namespace }} {{ osce_appname }} | oc apply -n {{ osce_namespace }} -f -"
   # apply does not indicate if something changed today. Assume changed_when
   # false and rely on the template update as our best indicator if something
   # changed.
@@ -47,7 +47,7 @@
 - name: Start build if required
   oc_start_build_check:
     namespace: "{{ osce_namespace }}"
-    buildconfig: "online-console-extensions"
+    buildconfig: "{{ osce_appname }}"
     git_ref: "{{ git_sha1_results.after }}"
   register: start_build_out
 
