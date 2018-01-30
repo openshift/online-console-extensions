@@ -1,4 +1,4 @@
-osce_appname: 'online-console-extensions'
+osce_appname: 'oso-console-extensions'
 
 # osce_target will be one of 'free|paid'.
 # osod_cluster_tier ==> osce_target
@@ -29,8 +29,4 @@ required_vars:
   - osce_scripts
   - osce_properties
 
-# This won't be necessary once the custom builder image is synced to aws-registry
-# Change this to whatever we name the builder image in aws-reg
 osce_builder_image: 'registry.reg-aws.openshift.com/openshift3/oso-console-extensions:latest'
-osce_builder_repo: 'https://github.com/openshift/online-console-extensions.git'
-osce_builder_git_ref: 'ansible-template'

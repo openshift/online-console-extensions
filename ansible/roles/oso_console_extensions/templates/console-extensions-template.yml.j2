@@ -36,7 +36,7 @@ objects:
           value: ${TARGET}
         from:
           kind: DockerImage
-          name: ${NAME}-builder:latest
+          name: "{{ osce_builder_image }}"
     output:
       to:
         kind: ImageStreamTag
