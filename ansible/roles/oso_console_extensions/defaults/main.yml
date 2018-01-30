@@ -28,5 +28,6 @@ required_vars:
   - osce_stylesheets
   - osce_scripts
   - osce_properties
+  - osce_url
 
 osce_builder_image: 'registry.reg-aws.openshift.com/openshift3/{{ osce_appname }}-builder:latest'
