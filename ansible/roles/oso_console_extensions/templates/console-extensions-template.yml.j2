@@ -85,8 +85,21 @@ objects:
           app: ${NAME}
           deploymentconfig: ${NAME}
       spec:
+        volumes:
+          - name: ${NAME}
+            secret:
+              secretName: ${NAME}
+              items:
+                - key: "tls.crt"
+                  path: certs/
+                - key: "tls.key"
+                  path: private/
         containers:
         - name: ${NAME}
+          volumeMounts:
+            - name: ${NAME}
+              mountPath: httpd-ssl/
+              readOnly: true
           ports:
           - containerPort: 8443
             protocol: TCP
@@ -110,7 +123,7 @@ objects:
       name: ${NAME}
       weight: 100
     tls:
-      termination: passthrough
+      termination: reencrypt
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
 
@@ -118,6 +131,8 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: ${NAME}
     name: ${NAME}
     labels:
       app: ${NAME}
