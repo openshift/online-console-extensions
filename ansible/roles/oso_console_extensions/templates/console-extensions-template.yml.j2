@@ -37,6 +37,8 @@ objects:
         from:
           kind: DockerImage
           name: "{{ osce_builder_image }}"
+        pullSecret:
+          name: "reg-aws-dockercfg"
     output:
       to:
         kind: ImageStreamTag
