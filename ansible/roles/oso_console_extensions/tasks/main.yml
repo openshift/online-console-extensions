@@ -16,13 +16,7 @@
     dest: "{{ osce_template_path }}"
 
 - name: Create template
-  oc_obj:
-    state: present
-    namespace: "{{ osce_namespace }}"
-    name: "{{ osce_appname }}"
-    kind: template
-    files:
-    - "{{ osce_template_path }}"
+  command: "oc apply -f {{ osce_template_path }} -n {{ osce_namespace }}"
 
 - name: Apply template
   shell: "oc process -n {{ osce_namespace }} {{ osce_appname }} | oc apply -n {{ osce_namespace }} -f -"
@@ -52,3 +46,12 @@
   register: start_build_out
 
 - debug: var=start_build_out
+
+- name: Create edge route for console-extensions url
+  oc_route:
+    name: "{{ osce_appname }}"
+    namespace: "{{ osce_namespace }}"
+    service_name: "{{ osce_appname }}"
+    tls_termination: edge
+    port: 8080
+    host: "{{ osce_url }}"
