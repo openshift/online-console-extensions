@@ -34,6 +34,7 @@
   window.OPENSHIFT_CONSTANTS.HELP["storage_classes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/storage_classes.html";
   window.OPENSHIFT_CONSTANTS.HELP["selector_label"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/selector_label_volume_binding.html";
   window.OPENSHIFT_CONSTANTS.HELP["notifications"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/notifications.html";
+  window.OPENSHIFT_CONSTANTS.HELP["deployment-operations"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/deployments/basic_deployment_operations.html#start-deployment";
 
   if (window.OPENSHIFT_EXTENSION_PROPERTIES.enable_pipelines) {
     window.OPENSHIFT_CONSTANTS.ENABLE_TECH_PREVIEW_FEATURE.pipelines = true;
