@@ -16,7 +16,7 @@ angular.module('openshiftOnlineConsoleTemplates', []).run(['$templateCache', fun
     "                <h1>Red Hat OpenShift <span class=\"about-reg\">&reg;</span></h1>\n" +
     "                <h2>About</h2>\n" +
     "                <p>\n" +
-    "                  <a target=\"_blank\" href=\"https://openshift.com\">OpenShift</a> is Red Hat's container application platform\n" +
+    "                  <a target=\"_blank\" href=\"https://www.openshift.com\">OpenShift</a> is Red Hat's container application platform\n" +
     "                  that allows developers to quickly develop, host, and scale applications in a cloud environment.\n" +
     "                </p>\n" +
     "\n" +
