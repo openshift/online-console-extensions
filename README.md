@@ -16,3 +16,20 @@ To serve HTML templates without requiring CORS headers, they are converted into 
 `grunt build --env=<free/paid/dedicated/notifications>`
 
 which will generate the file under `<env>/ui/assets/extensions/templates.js`. This file needs to be included as an `extensionScript` in the openshift-web-console project.
+
+## Custom builder image
+
+To provide consistent URLs for our hosted files, we use a custom builder image (built on top of `rhscl/httpd-24-rhel7`) which copies the files from `free` or `paid` into a common `/ui` directory.
+
+To simulate this, first build the custom image:
+
+```
+$ cd s2i-custom-builder
+$ docker build -t oso-console-extensions-builder .
+```
+
+Then, build the image with s2i passing the desired environment as a variable (`TARGET=<free/paid>`), eg:
+
+```
+s2i build https://github.com/openshift/online-console-extensions oso-console-extensions-builder oso-console-extensions -e TARGET=paid
+```
