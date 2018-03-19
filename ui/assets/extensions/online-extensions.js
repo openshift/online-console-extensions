@@ -34,10 +34,9 @@
   window.OPENSHIFT_CONSTANTS.HELP["storage_classes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/storage_classes.html";
   window.OPENSHIFT_CONSTANTS.HELP["selector_label"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/selector_label_volume_binding.html";
   window.OPENSHIFT_CONSTANTS.HELP["notifications"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/notifications.html";
+  window.OPENSHIFT_CONSTANTS.HELP["deployment-operations"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/deployments/basic_deployment_operations.html#start-deployment";
+  window.OPENSHIFT_CONSTANTS.HELP["creating_routes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url + "dev_guide/routes.html#creating-routes";
 
-  if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
-    window.OPENSHIFT_VERSION.openshift = window.OPENSHIFT_VERSION.openshift + " (online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
-  }
   if (window.OPENSHIFT_EXTENSION_PROPERTIES.enable_pipelines) {
     window.OPENSHIFT_CONSTANTS.ENABLE_TECH_PREVIEW_FEATURE.pipelines = true;
   }
@@ -71,16 +70,26 @@
     .module('openshiftOnlineConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
       $routeProvider
-	.when('/about', {
-	  templateUrl: 'online/ui/custom-templates/about.html',
-	  controller: 'AboutController'
-	});
+        .when('/about', {
+          templateUrl: 'online/ui/custom-templates/about.html',
+          controller: 'AboutController'
+        });
     })
     .run(function(extensionRegistry, $rootScope) {
       if(window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url) {
-	$rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
+        $rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
       }
-      
+
+      if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
+        $rootScope.online_version = "(online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
+      }
+      if(window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix) {
+        $rootScope.default_route_suffix = window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix;
+      }
+      if(window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled) {
+        $rootScope.custom_routes_enabled = window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled;
+      }
+
       /*
        * Request system status from statuspage.io
        */

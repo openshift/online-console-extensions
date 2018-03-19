@@ -19,6 +19,7 @@ export PATH="${PATH}:${repo_root}/node_modules/grunt-cli/bin"
 echo "Rebuilding templates..."
 grunt build --env=free
 grunt build --env=paid
+grunt build --env=dedicated
 
 # validate generated against what is committed
 echo "Verifying that checked in built files match the source..."
