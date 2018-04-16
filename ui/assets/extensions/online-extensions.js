@@ -34,10 +34,9 @@
   window.OPENSHIFT_CONSTANTS.HELP["storage_classes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/storage_classes.html";
   window.OPENSHIFT_CONSTANTS.HELP["selector_label"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/selector_label_volume_binding.html";
   window.OPENSHIFT_CONSTANTS.HELP["notifications"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/notifications.html";
+  window.OPENSHIFT_CONSTANTS.HELP["deployment-operations"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/deployments/basic_deployment_operations.html#start-deployment";
+  window.OPENSHIFT_CONSTANTS.HELP["creating_routes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url + "dev_guide/routes.html#creating-routes";
 
-  if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
-    window.OPENSHIFT_VERSION.openshift = window.OPENSHIFT_VERSION.openshift + " (online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
-  }
   if (window.OPENSHIFT_EXTENSION_PROPERTIES.enable_pipelines) {
     window.OPENSHIFT_CONSTANTS.ENABLE_TECH_PREVIEW_FEATURE.pipelines = true;
   }
@@ -60,8 +59,8 @@
   }
 
   subcategory.items.unshift({
-      id: 'openjdk',
-      label: 'OpenJDK'
+    id: 'openjdk',
+    label: 'OpenJDK'
   });
 
   /*
@@ -71,16 +70,26 @@
     .module('openshiftOnlineConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
       $routeProvider
-	.when('/about', {
-	  templateUrl: 'online/ui/custom-templates/about.html',
-	  controller: 'AboutController'
-	});
+        .when('/about', {
+          templateUrl: 'online/ui/custom-templates/about.html',
+          controller: 'AboutController'
+        });
     })
     .run(function(extensionRegistry, $rootScope) {
       if(window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url) {
-	$rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
+        $rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
       }
-      
+
+      if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
+        $rootScope.online_version = "(online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
+      }
+      if(window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix) {
+        $rootScope.default_route_suffix = window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix;
+      }
+      if(window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled) {
+        $rootScope.custom_routes_enabled = window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled;
+      }
+
       /*
        * Request system status from statuspage.io
        */
@@ -89,7 +98,13 @@
 
       $.getJSON(window.OPENSHIFT_EXTENSION_PROPERTIES.status_page, function (data) {
         var n = (data.incidents || []).length;
-
+        for (var i = 0; i < data.components.length; i++) {
+          var component = data.components[i]
+          if (component.status != "operational") {
+            n++
+          }
+        }
+        
         if (n > 0) {
           var issueStr = n + ' open issue';
           if (n !== 1) {
@@ -97,28 +112,31 @@
           }
           $('<span title="System Status" class="fa status-icon pficon-warning-triangle-o"></span>').appendTo(system_status_elem);
           $('<span class="status-issue">' + issueStr + '</span>').appendTo(system_status_elem);
-
-          system_status_elem_mobile.append(system_status_elem.clone());
-
-          // only add the extension if there is something to show so we
-          // do not generate empty nodes if no issues
-          extensionRegistry
-            .add('nav-system-status', function() {
-              return [{
-                type: 'dom',
-                node: system_status_elem
-              }];
-            });
-
-          extensionRegistry
-            .add('nav-system-status-mobile', function() {
-              return [{
-                type: 'dom',
-                node: system_status_elem_mobile
-              }];
-            });
+        } else {
+          $('<span title="System Status" class="fa status-icon pficon-ok"></span>').appendTo(system_status_elem);
         }
       });
+
+      system_status_elem.css('display', '');
+
+      system_status_elem_mobile.append(system_status_elem.clone());
+      system_status_elem_mobile.css('display', '');
+
+      extensionRegistry
+        .add('nav-system-status', function() {
+          return [{
+            type: 'dom',
+            node: system_status_elem
+          }];
+        });
+
+      extensionRegistry
+        .add('nav-system-status-mobile', function() {
+          return [{
+            type: 'dom',
+            node: system_status_elem_mobile
+          }];
+        });
 
       if (window.OPENSHIFT_EXTENSION_PROPERTIES.account_url) {
         extensionRegistry
@@ -148,8 +166,8 @@
         });
     });
 
-    /*
-     * Register the custom angular module
-     */
-    hawtioPluginLoader.addModule('openshiftOnlineConsoleExtensions');
+  /*
+   * Register the custom angular module
+   */
+  hawtioPluginLoader.addModule('openshiftOnlineConsoleExtensions');
 })();
