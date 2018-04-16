@@ -1,4 +1,13 @@
 ---
+- name: Check for required vars
+  hosts: OSEv3
+  remote_user: root
+  run_once: true
+  tasks:
+    - fail:
+        msg: "Please specify a value for 'tier' by passing '-e tier=starter|pro' to the playbook"
+      when: tier is undefined
+
 - name: 'Set openshift-ansible vars facts'
   hosts: OSEv3
   remote_user: root
@@ -7,9 +16,7 @@
   - vars/deploy_vars.yml
   - vars/console_extensions_vars.yml
   roles:
-  - set_config_vars
-
-#- debug: var=hostvars[groups['OSEv3'][0]]
+  - set_facts_OSEv3
 
 - name: Deploy online console extensions
   hosts: masters
@@ -18,13 +25,6 @@
   tasks:
   # Check if optional vars and secret vars dirs are specified and exist, and load if so.
   # This allows for seamless re-use of this playbook between Online devenv and Ops.
-  - set_fact:
-      osce_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
-  - set_fact:
-      osce_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
-  - set_fact:
-      osce_properties: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_properties }}"
-
   - set_fact:
       vars_dir: "./vars/"
     when: vars_dir is not defined
@@ -42,31 +42,26 @@
     when: vars_dir_stat.stat.exists
 
   - set_fact:
-      group_vars_dir: "./inventory/group_vars/"
-    when: group_vars_dir is not defined
+      osce_scripts: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_script_urls }}"
+      osce_stylesheets: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_stylesheet_urls }}"
+      osce_properties: "{{ hostvars[groups['OSEv3'][0]].openshift_extension_properties }}"
 
-  - name: Check if group_vars/ exists
-    local_action: stat path="{{ group_vars_dir }}"
-    register: group_vars_dir_stat
-    become: no
+  # In the case that openshift-scripts-* rpm is not installed, create this directory
+  - file: 
+      path: /etc/openshift-online/templates
+      state: directory
+      mode: 0755
 
-# The osce_target is also set in openshift/online/ansible/oso_deployer.yml
-# Need to keep these in sync.  This is so you can run console-extensions.yml as a
-# standalone or can include in oso_deployer.yml
+  # The osce_target is also set in openshift/online/ansible/oso_deployer.yml
+  # Need to keep these in sync.  This is so you can run console-extensions.yml as a
+  # standalone or can include in oso_deployer.yml
   - set_fact:
       osce_target: "free"
     when: tier == "starter"
 
   - set_fact:
       osce_target: "paid"
-    when: 'tier == "pro" or tier == "none"'
-
-  - name: Load all variables from group_vars/
-    include_vars:
-      dir: "{{ group_vars_dir }}"
-      extensions:
-      - yml
-    when: group_vars_dir_stat.stat.exists
+    when: tier == "pro"
 
   - include_role:
       name: lib_openshift
@@ -79,6 +74,21 @@
 
   - include_role:
       name: oc_start_build_check
+
+# TODO: Make this work, path to module is not set correctly
+#  - oc_secret:
+#      name: 'reg-aws-dockercfg'
+#      namespace: "{{ osce_namespace }}"
+#      files: '/root/.docker/config.json'
+#      type: new-dockercfg
+  - name: 'Check for reg-aws-dockercfg secret in {{ osce_namespace }}'
+    shell: 'oc get secret reg-aws-dockercfg -n {{ osce_namespace }}'
+    register: pull_secret
+    ignore_errors: True
+
+  - name: 'Create reg-aws-dockercfg secret in {{ osce_namespace }}'
+    shell: 'oc secrets new reg-aws-dockercfg /root/.docker/config.json -n {{ osce_namespace }}'
+    when: pull_secret|failed
 
   - include_role:
       name: oso_console_extensions
@@ -94,4 +104,3 @@
           value: "{{ osce_stylesheets }}"
         - key: extensions#properties
           value: "{{ osce_properties }}"
-

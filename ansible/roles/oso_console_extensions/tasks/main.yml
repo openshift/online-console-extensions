@@ -8,22 +8,28 @@
 - import_tasks: uninstall.yml
   when: osce_uninstall | bool
 
-- debug: msg="Deploying {{ osce_appname}} from {{ osce_git_repo }} ref {{ osce_git_ref }}"
+- debug:
+    msg: "Deploying {{ osce_appname}} from {{ osce_git_repo }} ref {{ osce_git_ref }}"
 
 - name: Copy application template
   template:
     src: console-extensions-template.yml.j2
     dest: "{{ osce_template_path }}"
+  register: template
 
 - name: Create template
   command: "oc apply -f {{ osce_template_path }} -n {{ osce_namespace }}"
+  when: template|changed
+
+- name: Determine if template has changed
+  debug:
+    msg: "The file {{ osce_template_path }} has changed, console-extensions will be updated"
+  when: template|changed
 
 - name: Apply template
   shell: "oc process -n {{ osce_namespace }} {{ osce_appname }} | oc apply -n {{ osce_namespace }} -f -"
-  # apply does not indicate if something changed today. Assume changed_when
-  # false and rely on the template update as our best indicator if something
-  # changed.
   changed_when: false
+  when: template|changed
 
 - name: Fetch latest git online-console-extensions
   git:
@@ -34,9 +40,9 @@
   register: git_sha1_results
   # Git may not be installed on remote hosts.
   delegate_to: localhost
-  changed_when: false
 
-- debug: msg="Checking that latest build matches git ref {{ git_sha1_results.after }}"
+- debug:
+    msg: "Checking that latest build matches git ref {{ git_sha1_results.after }}"
 
 - name: Start build if required
   oc_start_build_check:
@@ -44,8 +50,6 @@
     buildconfig: "{{ osce_appname }}"
     git_ref: "{{ git_sha1_results.after }}"
   register: start_build_out
-
-- debug: var=start_build_out
 
 - name: Create edge route for console-extensions url
   oc_route:
@@ -55,3 +59,11 @@
     tls_termination: edge
     port: 8080
     host: "{{ osce_url }}"
+
+- name: Check deployment status
+  include_role:
+    name: roles/oso_deployment_status
+  vars:
+    osds_dc_name: "{{ osce_appname }}"
+    osds_namespace: "{{ osce_namespace }}"
+

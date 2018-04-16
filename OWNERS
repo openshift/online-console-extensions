@@ -6,10 +6,12 @@ reviewers:
   - lancejjohnson
   - markturansky
   - sallyom
-  - thrasher-redhat
   - tiwillia
 approvers:
   - abhgupta
   - markturansky
   - tiwillia
+  - damemi
+  - sallyom
+  - dak1n1
 
