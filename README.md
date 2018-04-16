@@ -11,11 +11,17 @@ If you run `oc expose svc/online-console-extensions` you will be able to see the
 
 ## Building HTML templates
 
-To serve HTML templates without requiring CORS headers, they are converted into Javascript which is then included as a dependency to our main online extensions module, injecting the HTML into the pages. To generate the Javascript, (for example, after you've made a change to an HTML template) ensure that Grunt is installed (`sudo npm install`) and run:
+To serve HTML templates without requiring CORS headers, they are converted into Javascript which is then included as a dependency to our main online extensions module, injecting the HTML into the pages.
+
+If your pull request fails a Jenkins job with the message `FAILURE: ONLINE-CONSOLE-EXTENSIONS GENERATED TEMPLATE CHECK`, it means you may have made changes to one of these templates and forgotten to generate the new templates and commit the results. You can run the `hack/check-generated-templates.sh` script (which is what the Jenkins job runs) in your branch, which will return a diff of any files which need to be generated and narrow your debugging.
+
+To generate the Javascript, (for example, after you've made a change to an HTML template) ensure that Grunt is installed (`sudo npm install`) and run:
 
 `grunt build --env=<free/paid/dedicated/notifications>`
 
 which will generate the file under `<env>/ui/assets/extensions/templates.js`. This file needs to be included as an `extensionScript` in the openshift-web-console project.
+
+Note that if this is not done, your template changes will not take effect!
 
 ## Custom builder image
 
