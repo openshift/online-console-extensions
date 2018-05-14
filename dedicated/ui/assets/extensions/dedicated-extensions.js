@@ -18,19 +18,19 @@ window.OPENSHIFT_CONSTANTS.CLI = {
 window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url;
 
 angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
-  .run(function(HawtioExtension) {
+  .run(function(extensionRegistry) {
 
     /*
       Add additional items to the help dropdown in the top navigation bar
     */
-    HawtioExtension.add('nav-help-dropdown', function ($scope) {
+    extensionRegistry.add('nav-help-dropdown', function ($scope) {
       var li = $('<li>');
       $('<a href="'+window.OPENSHIFT_EXTENSION_PROPERTIES.support_link+'" target="_blank">Support</a>')
         .appendTo(li);
       return li;
     });
 
-    HawtioExtension.add('nav-help-dropdown', function ($scope) {
+    extensionRegistry.add('nav-help-dropdown', function ($scope) {
       return $('<li class="divider">');
     });
 

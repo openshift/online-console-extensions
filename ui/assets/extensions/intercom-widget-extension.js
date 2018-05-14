@@ -6,7 +6,7 @@
    */
   angular
     .module('openshiftOnlineConsoleIntercomExtension', ['openshiftConsole'])
-    .run(function($rootScope, $q, HawtioExtension) {
+    .run(function($rootScope, $q) {
       if (typeof Intercom === "undefined") {
         window.Intercom = function() {
           Intercom.updateSettings(arguments);
