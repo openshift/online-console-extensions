@@ -17,8 +17,15 @@ window.OPENSHIFT_CONSTANTS.CLI = {
 */
 window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url;
 
-angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
-  .run(function(extensionRegistry) {
+angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
+    .config(function($routeProvider) {
+      $routeProvider
+        .when('/about', {
+          templateUrl: 'online/ui/custom-templates/about.html',
+          controller: 'AboutController'
+        });
+    })
+    .run(function(extensionRegistry, $rootScope) {
     /*
       Add additional variables for custom about.html page
     */
