@@ -19,6 +19,22 @@ window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES
 
 angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
   .run(function(extensionRegistry) {
+    /*
+      Add additional variables for custom about.html page
+    */
+    if(window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url) {
+      $rootScope.online_registry_url = window.OPENSHIFT_EXTENSION_PROPERTIES.registry_url
+    }
+
+    if (window.OPENSHIFT_EXTENSION_PROPERTIES.online_version) {
+      $rootScope.online_version = "(online version " + window.OPENSHIFT_EXTENSION_PROPERTIES.online_version + ")";
+    }
+    if(window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix) {
+      $rootScope.default_route_suffix = window.OPENSHIFT_EXTENSION_PROPERTIES.default_route_suffix;
+    }
+    if(window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled) {
+      $rootScope.custom_routes_enabled = window.OPENSHIFT_EXTENSION_PROPERTIES.custom_routes_enabled;
+    }
 
     /*
       Add additional items to the help dropdown in the top navigation bar
