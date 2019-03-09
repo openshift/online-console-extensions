@@ -17,7 +17,7 @@ window.OPENSHIFT_CONSTANTS.CLI = {
 */
 window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url;
 
-angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
+angular.module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
     .config(function($routeProvider) {
       $routeProvider
         .when('/about', {
