@@ -26,11 +26,11 @@
   window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url;
 
   angular
-    .module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
+    .module('openshiftDedicatedConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
       $routeProvider
         .when('/about', {
-          templateUrl: 'ui/custom-templates/about.html',
+          templateUrl: 'online/ui/custom-templates/about.html',
           controller: 'AboutController'
         });
     })
