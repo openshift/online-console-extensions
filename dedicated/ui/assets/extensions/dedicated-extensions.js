@@ -27,13 +27,6 @@
 
   angular
     .module('openshiftDedicatedConsoleExtensions', ['openshiftConsole'])
-    .config(function($routeProvider) {
-      $routeProvider
-        .when('/about', {
-          templateUrl: 'online/ui/custom-templates/about.html',
-          controller: 'AboutController'
-        });
-    })
     .run(function(extensionRegistry, $rootScope) {
       /*
         Add additional variables for custom about.html page
