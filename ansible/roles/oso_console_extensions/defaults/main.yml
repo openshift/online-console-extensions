@@ -1,11 +1,12 @@
 osce_appname: 'oso-console-extensions'
 
-# osce_target will be one of 'free|paid'.
+# osce_target will be one of 'free|paid|dedicated'.
 # osod_cluster_tier ==> osce_target
 #           starter ==> free
 #               pro ==> paid 
 #             dsaas ==> free
 #              osio ==> free
+#         dedicated ==> dedicated
 
 # WARNING: Keep these in sync with the defaults in the template.  We want the
 # template to be independently usable so default must be defined in both.

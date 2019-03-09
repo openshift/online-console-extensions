@@ -104,7 +104,7 @@
             n++
           }
         }
-        
+
         if (n > 0) {
           var issueStr = n + ' open issue';
           if (n !== 1) {
