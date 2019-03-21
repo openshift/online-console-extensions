@@ -25,6 +25,12 @@
   */
   window.OPENSHIFT_CONSTANTS.HELP_BASE_URL = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url;
 
+  /*
+   * "install_guide" links that need to be manually overwritten for Online
+   */
+  window.OPENSHIFT_CONSTANTS.HELP["storage_classes"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/storage_classes.html";
+  window.OPENSHIFT_CONSTANTS.HELP["selector_label"] = window.OPENSHIFT_EXTENSION_PROPERTIES.doc_url+"dev_guide/selector_label_volume_binding.html";
+
   angular
     .module('openshiftDedicatedConsoleExtensions', ['openshiftConsole', 'openshiftOnlineConsoleTemplates'])
     .config(function($routeProvider) {
