@@ -11,6 +11,11 @@
 - debug:
     msg: "Deploying {{ osce_appname}} from {{ osce_git_repo }} ref {{ osce_git_ref }}"
 
+- name: Ensure template path exists
+  file:
+    state: directory
+    path: "{{ osce_template_path|dirname }}"
+
 - name: Copy application template
   template:
     src: console-extensions-template.yml.j2
